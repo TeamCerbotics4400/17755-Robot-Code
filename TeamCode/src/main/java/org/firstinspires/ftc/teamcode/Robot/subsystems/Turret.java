@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Robot.subsystems;
 
+import androidx.annotation.NonNull;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -13,7 +15,7 @@ public class Turret extends SubsystemBase {
     private HardwareMap hardwareMap;
     private Telemetry telemetry;
 
-    public Turret(HardwareMap hardwareMap, Telemetry telemetry) {
+    public Turret(@NonNull HardwareMap hardwareMap, Telemetry telemetry) {
         this.hardwareMap = hardwareMap;
         this.telemetry = telemetry;
 

@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.Robot.subsystems;
 
+import android.graphics.Paint;
+
+import com.bylazar.field.Style;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.math.Vector;
@@ -9,6 +12,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Robot.Utils.Drawing;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 import java.util.Locale;
@@ -28,7 +32,7 @@ public class Drivetrain extends SubsystemBase {
 
     public void startTeleOp() {follower.startTeleopDrive();}
 
-    public void followPath(PathChain path) {follower.followPath(path);}
+    public void followPath(PathChain path) {follower.followPath(path, true);}
 
     public PathBuilder pathBuldier() {return follower.pathBuilder();}
 
@@ -53,6 +57,10 @@ public class Drivetrain extends SubsystemBase {
         return follower.getVelocity();
     }
 
+    public Style getStyle() {
+        return new Style("", "#3F51B5", 0.0);
+    }
+
     @Override
     public void periodic() {
         String pose = String.format(
@@ -70,6 +78,8 @@ public class Drivetrain extends SubsystemBase {
                 getVelocity().getYComponent(),
                 getVelocity().getMagnitude()
         );
+
+        Drawing.drawRobot(getPose(), getStyle());
 
         telemetry.addData(getSubsystem(), pose);
         telemetry.addData(getSubsystem(), velocity);
