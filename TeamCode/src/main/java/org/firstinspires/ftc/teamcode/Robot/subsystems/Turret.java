@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.Robot.subsystems;
 
-import androidx.annotation.NonNull;
+import static org.firstinspires.ftc.teamcode.Robot.Constants.ShooterConstants.maxDegrees;
+import static org.firstinspires.ftc.teamcode.Robot.Constants.ShooterConstants.minDegrees;
+import static org.firstinspires.ftc.teamcode.Robot.Constants.ShooterConstants.ticksPerRev;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -15,7 +17,7 @@ public class Turret extends SubsystemBase {
     private HardwareMap hardwareMap;
     private Telemetry telemetry;
 
-    public Turret(@NonNull HardwareMap hardwareMap, Telemetry telemetry) {
+    public Turret(HardwareMap hardwareMap, Telemetry telemetry) {
         this.hardwareMap = hardwareMap;
         this.telemetry = telemetry;
 
@@ -24,11 +26,23 @@ public class Turret extends SubsystemBase {
         turret.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
-    public void setPower(double power) {
+    private int degreesToTicks(double degrees) {
+        return (int)((degrees / 360.0) * ticksPerRev(turret));
+    }
+
+    public void moveToDegrees(double degrees, double power) {
+        if (degrees > maxDegrees) degrees = maxDegrees;
+        if (degrees < minDegrees) degrees = minDegrees;
+
+        int target = degreesToTicks(degrees);
+
         turret.setPower(power);
+        turret.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        turret.setTargetPosition(target);
     }
 
     public void stop() {
         turret.setPower(0.0);
+        turret.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 }

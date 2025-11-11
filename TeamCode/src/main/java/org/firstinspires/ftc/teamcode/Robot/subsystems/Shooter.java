@@ -1,18 +1,18 @@
 package org.firstinspires.ftc.teamcode.Robot.subsystems;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
-import com.seattlesolvers.solverslib.hardware.motors.Motor;
-import com.seattlesolvers.solverslib.hardware.motors.MotorEx;
-import com.seattlesolvers.solverslib.hardware.motors.MotorGroup;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import java.util.Locale;
 
 public class Shooter extends SubsystemBase {
-    private MotorEx above, below;
-    private MotorGroup shotter;
+    private DcMotorEx above, below;
     private HardwareMap hardwareMap;
     private Telemetry telemetry;
 
@@ -21,16 +21,25 @@ public class Shooter extends SubsystemBase {
         this.hardwareMap = hardwareMap;
         this.telemetry = telemetry;
 
-        above = new MotorEx(hardwareMap, "Above");
-        above.setInverted(true);
+        above = hardwareMap.get(DcMotorEx.class, "Above");
+        above.setDirection(DcMotorSimple.Direction.FORWARD);
+        above.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        above.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients());
 
-        below = new MotorEx(hardwareMap, "Below");
-        below.setInverted(false);
+        below = hardwareMap.get(DcMotorEx.class, "Below");
+        below.setDirection(DcMotorSimple.Direction.FORWARD);
+        below.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        below.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients());
+    }
 
-        shotter = new MotorGroup(above, below);
-        shotter.setRunMode(Motor.RunMode.RawPower);
-        shotter.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        shotter.setVeloCoefficients(0.5, 1, 0);
+    public void setPower(double power) {
+        above.setPower(power);
+        below.setPower(power);
+    }
+
+    public void stop() {
+        above.setPower(0.0);
+        below.setPower(0.0);
     }
 
     public void setRPM(int RPM) {
@@ -38,32 +47,25 @@ public class Shooter extends SubsystemBase {
         double gearRatio = 1.1818;
 
         double targetTicksPerSeconds = (RPM * TICKS_PER_REV * gearRatio);
-        shotter.set(targetTicksPerSeconds);
+        above.setPower(targetTicksPerSeconds);
+        below.setPower(targetTicksPerSeconds);
     }
 
-    public void setPower(double power) {
-        shotter.set(power);
-    }
-
-    public void stop() {
-        shotter.stopMotor();
-    }
-
-    public double getRPM(MotorEx motorEx) {
-        double ticksPerSecond = motorEx.getVelocity();
+    public double getRPM(DcMotorEx motorEx) {
         double ticksREV = 20.0;
-        double gearratio = 1.1018;
+        double gearRatio = 1.1018;
 
-        double rpm = (ticksPerSecond * 60) / (ticksREV * gearratio);
-        return rpm;
+        return  (motorEx.getVelocity() * 60) / (ticksREV * gearRatio);
     }
 
     @Override
     public void periodic() {
         String data = String.format(
                 Locale.US,
-                "above: %.3f, below: %.3f",
+                "%s: %.3f, %s: %.3f",
+                above.getDeviceName(),
                 getRPM(above),
+                below.getDeviceName(),
                 getRPM(below)
         );
 
