@@ -6,35 +6,35 @@ import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
-import org.firstinspires.ftc.teamcode.Robot.subsystems.Turret;
+import org.firstinspires.ftc.teamcode.Robot.subsystems.Intake;
 
-@TeleOp(name = "Turrent-test", group = "Test")
-public class TurrentTest extends CommandOpMode {
-    private InstantCommand Forward(Turret turret) {
+@TeleOp(name = "Intake-Beta", group = "Test")
+public class IntakeTest extends CommandOpMode {
+    private InstantCommand FORWARD(Intake intake) {
         return new InstantCommand(() -> {
-            turret.moveToDegrees(180, 0.5);
+            intake.setPower(0.5);
         });
     }
 
-    private InstantCommand Reverse(Turret turret) {
+    private InstantCommand REVERSE(Intake intake) {
         return new InstantCommand(() -> {
-            turret.moveToDegrees(180, -0.5);
+           intake.setPower(-0.5);
         });
     }
 
     @Override
     public void initialize() {
-        Turret turret = new Turret(hardwareMap, telemetry);
-        register(turret);
+        Intake intake = new Intake(hardwareMap, telemetry);
+        register(intake);
 
         GamepadEx gamepadEx = new GamepadEx(gamepad1);
 
         gamepadEx.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
-                .whenPressed(Forward(turret))
-                .whenReleased(turret::stop);
+                .whileHeld(FORWARD(intake))
+                .whenReleased(new InstantCommand(intake::stop));
 
         gamepadEx.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
-                .whenPressed(Reverse(turret))
-                .whenReleased(turret::stop);
+                .whileHeld(REVERSE(intake))
+                .whenReleased(new InstantCommand(intake::stop));
     }
 }

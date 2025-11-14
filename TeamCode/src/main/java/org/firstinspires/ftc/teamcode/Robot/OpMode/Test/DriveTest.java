@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.Robot.TrayectorieLIB.RedPath;
 import org.firstinspires.ftc.teamcode.Robot.Utils.Drawing;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Drivetrain;
 
-@TeleOp(name = "Drive-Test", group = "Test")
+@TeleOp(name = "Drive-Beta", group = "Test")
 public class DriveTest extends CommandOpMode {
     @Override
     public void initialize() {

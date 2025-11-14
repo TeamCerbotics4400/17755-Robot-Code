@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.Robot.subsystems.Shooter;
 
 @TeleOp(name = "Shooter-Beta", group = "Test")
 @Configurable
-public class ShooterTeleOp extends CommandOpMode {
+public class ShooterTest extends CommandOpMode {
     private Shooter shooter;
     private TelemetryManager panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
 
