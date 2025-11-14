@@ -23,12 +23,13 @@ public class Drivetrain extends SubsystemBase {
     private Telemetry telemetry;
 
 
-    public Drivetrain(HardwareMap hardwareMap, Telemetry telemetry) {
+    public Drivetrain(HardwareMap hardwareMap, Telemetry telemetry, Pose pose) {
         setSubsystem("Drivetrain");
         this.follower = Constants.createFollower(hardwareMap);
-    }
 
-    public void startPose(Pose pose) {follower.setStartingPose(pose);}
+        follower.setStartingPose(pose);
+        Drawing.init();
+    }
 
     public void startTeleOp() {follower.startTeleopDrive();}
 
@@ -44,6 +45,10 @@ public class Drivetrain extends SubsystemBase {
 
     public Follower getFollower() {return follower;}
 
+
+    public void setDrive(double y, double x, double turn, boolean isRobotCentric) {
+        follower.setTeleOpDrive(y, x, turn, isRobotCentric);
+    }
 
     public void setDrive(double y, double x, double turn) {
         follower.setTeleOpDrive(y, x, turn);

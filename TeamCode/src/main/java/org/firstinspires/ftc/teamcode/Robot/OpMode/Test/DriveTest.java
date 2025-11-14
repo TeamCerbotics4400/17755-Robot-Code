@@ -6,6 +6,7 @@ import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 
 import org.firstinspires.ftc.teamcode.Robot.Command.Drivetrain.DriveCommand;
+import org.firstinspires.ftc.teamcode.Robot.TrayectorieLIB.RedPath;
 import org.firstinspires.ftc.teamcode.Robot.Utils.Drawing;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Drivetrain;
 
@@ -13,7 +14,7 @@ import org.firstinspires.ftc.teamcode.Robot.subsystems.Drivetrain;
 public class DriveTest extends CommandOpMode {
     @Override
     public void initialize() {
-        Drivetrain drivetrain = new Drivetrain(hardwareMap, telemetry);
+        Drivetrain drivetrain = new Drivetrain(hardwareMap, telemetry, RedPath.finalyPose);
         register(drivetrain);
 
         GamepadEx player = new GamepadEx(gamepad1);
@@ -22,10 +23,9 @@ public class DriveTest extends CommandOpMode {
                 drivetrain,
                 () -> -player.getLeftY(),
                 player::getLeftX,
-                player::getRightX
+                player::getRightX,
+                true
         ));
-
-        Drawing.init();
 
         schedule(new RunCommand(() -> {
             telemetry.update();

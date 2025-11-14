@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.Robot.Command.Sequence;
 
-import com.pedropathing.paths.PathChain;
+import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 
 import org.firstinspires.ftc.teamcode.Robot.Command.Drivetrain.PathCommand;
@@ -16,8 +16,15 @@ public class Red extends SequentialCommandGroup {
         addRequirements(drivetrain);
 
         addCommands(
-                new PathCommand(drivetrain, RedPath.pose1(drivetrain)),
-                new PathCommand(drivetrain, RedPath.pose2(drivetrain))
+                new PathCommand(drivetrain, RedPath.path1(drivetrain)),
+                new ParallelCommandGroup(
+                        new PathCommand(drivetrain, RedPath.path2(drivetrain))
+
+                ),
+                new PathCommand(drivetrain, RedPath.path3(drivetrain)),
+                new PathCommand(drivetrain, RedPath.path4(drivetrain)),
+                new PathCommand(drivetrain, RedPath.path5(drivetrain)),
+                new PathCommand(drivetrain, RedPath.path6(drivetrain))
         );
     }
 }

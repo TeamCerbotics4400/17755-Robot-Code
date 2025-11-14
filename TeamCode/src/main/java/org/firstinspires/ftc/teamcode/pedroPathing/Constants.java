@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.pedroPathing;
 
+import com.pedropathing.Drivetrain;
 import com.pedropathing.control.FilteredPIDFCoefficients;
 import com.pedropathing.control.PIDFCoefficients;
 import com.pedropathing.follower.Follower;
@@ -21,48 +22,27 @@ public class Constants {
             .mass(5)
             .forwardZeroPowerAcceleration(-25.9346931313679598)
             .lateralZeroPowerAcceleration(-67.342491844080064)
-            .translationalPIDFCoefficients(new PIDFCoefficients(
-                    0.03,
-                    0,
-                    0,
-                    0.015
-            ))
-            .translationalPIDFSwitch(4)
-            .secondaryTranslationalPIDFCoefficients(new PIDFCoefficients(
-                    0.4,
-                    0,
-                    0.005,
-                    0.0006
-            ))
-            .headingPIDFCoefficients(new PIDFCoefficients(
-                    0.8,
-                    0,
-                    0,
-                    0.01
-            ))
-            .secondaryHeadingPIDFCoefficients(new PIDFCoefficients(
-                    2.5,
-                    0,
-                    0.1,
-                    0.0005
-            ))
-            .drivePIDFCoefficients(new FilteredPIDFCoefficients(
-                    0.1,
-                    0,
-                    0.00035,
-                    0.6,
-                    0.015
-            ))
-            .secondaryDrivePIDFCoefficients(new FilteredPIDFCoefficients(
-                    0.02,
-                    0,
-                    0.000005,
-                    0.6,
-                    0.01
-            ))
+            .drivePIDFCoefficients(
+                    new FilteredPIDFCoefficients(
+                            0.1,
+                            0,
+                            0.00035,
+                            0.6,
+                            0.015
+                    )
+            )
+            .useSecondaryDrivePIDF(true)
+            .secondaryDrivePIDFCoefficients(
+                    new FilteredPIDFCoefficients(
+                            0.02,
+                            0,
+                            0.000005,
+                            0.6,
+                            0.01
+                    )
+            )
             .drivePIDFSwitch(15)
             .centripetalScaling(0.0005);
-
 
     public static MecanumConstants drivConstants = new MecanumConstants()
             .maxPower(1)
@@ -94,7 +74,12 @@ public class Constants {
             .forwardEncoderDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD)
             .strafeEncoderDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD);
 
-    public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);
+    public static PathConstraints pathConstraints = new PathConstraints(
+            0.99,
+            100,
+            1,
+            1
+    );
 
     public static Follower createFollower(HardwareMap hardwareMap) {
         return new FollowerBuilder(followerConstants, hardwareMap)
